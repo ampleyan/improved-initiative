@@ -27,19 +27,27 @@ export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProp
       this.props.combatant.Color && this.props.combatant.Color.length > 0;
     return (
       <li className={classNames.join(" ")}>
-        <div className="combatant__initiative">
-          {this.props.combatant.Initiative}
-        </div>
-        {this.props.portraitColumnVisible && (
-          <div className="combatant__portrait">
-            {this.props.combatant.ImageURL && (
+        {/*  {this.props.portraitColumnVisible && (*/}
+        {/*  <div className="combatant__portrait">*/}
+        {/*    {this.props.combatant.ImageURL && this.props.isActive && (*/}
+        {/*      <img*/}
+        {/*        src={this.props.combatant.ImageURL}*/}
+        {/*        onClick={() => this.props.showPortrait(this.props.combatant)}*/}
+        {/*      />*/}
+        {/*    )}*/}
+        {/*  </div>*/}
+        {/*)}*/}
+        <div className="combatant__portrait">
+            {this.props.combatant.ImageURL && this.props.isActive && (
               <img
                 src={this.props.combatant.ImageURL}
                 onClick={() => this.props.showPortrait(this.props.combatant)}
               />
             )}
           </div>
-        )}
+        <div className="combatant__initiative">
+          {this.props.combatant.Initiative}
+        </div>
         <div className="combatant__name">
           {this.props.combatant.Color && hasColor && (
             <span

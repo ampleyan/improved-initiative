@@ -1,1 +1,6 @@
 theme: jekyll-theme-cayman
+PORT:8082
+NODE_ENV: development
+BASE_URL: http://localhost:8082
+DEFAULT_ACCOUNT_LEVEL: epicinitiative
+

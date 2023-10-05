@@ -13,8 +13,12 @@
 #playerview {
   margin: 0;
   font-size: 20px;
+  padding-left: 120px;
+  background: #f4efe7 url('../img/back.jpg') no-repeat center / cover;
 
   .combatant {
+    margin-left: 320px;
+    margin-right: 320px;
     height: unset;
     display: flex;
     border-left: @active-combatant-indicator-width solid transparent;
@@ -22,9 +26,12 @@
 
   .combatant.active {
     border-left: @active-combatant-indicator-width solid @primary-red;
+    background-color: lightgreen;
   }
 
   .combatant--header {
+    margin-left: 320px;
+    margin-right: 320px;
     flex-direction: row;
     padding: @large-spacer @medium-spacer @large-spacer @medium-spacer;
   }
@@ -38,17 +45,24 @@
   }
 
   .combatant__portrait {
-    width: 50px;
+    //width: 50px;
     align-items: center;
-    padding-right: 1vw;
+    //padding-right: 1vw;
   }
 
   .combatant__portrait img {
-    max-height: 50px;
+    position: absolute;
+    max-height:none;
+    max-width:200px;
+    z-index:1;
+    left: 0;
+    top: 0;
+    margin-left: 120px;
+    //margin: 0px 10px 10px 10px;
   }
 
   .combatant__name {
-    flex-basis: 30%;
+    flex-basis: 25%;
     flex-direction: row;
   }
 
@@ -70,6 +84,8 @@
   }
 
   .combat-footer {
+      margin-left: 320px !important;
+    margin-right: 320px !important;
     flex-direction: row;
     justify-content: flex-end;
     margin: @medium-spacer;

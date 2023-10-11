@@ -14,6 +14,10 @@ import { PlayerViewCombatant } from "./PlayerViewCombatant";
 import { PlayerViewCombatantHeader } from "./PlayerViewCombatantHeader";
 import { PortraitWithCaption } from "./PortraitModal";
 import { ApplyTagCallback, TagSuggestor } from "./TagSuggestor";
+import {Listing} from "../../Library/Listing";
+import {Listable} from "../../../common/Listable";
+import {PlayerViewTags} from "./PlayerViewTags";
+
 
 interface LocalState {
   showPortrait: boolean;
@@ -30,6 +34,9 @@ interface OwnProps {
   onSuggestDamage: ApplyDamageCallback;
   onSuggestTag: (combatantId: string, tagState: TagState) => void;
   combatStats?: CombatStats;
+  conditions?: Array<any>;
+  conditionsCurrent?: Array<any>;
+
 }
 
 export type PlayerViewProps = PlayerViewState & OwnProps;
@@ -44,9 +51,8 @@ export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
       portraitWasRequestedByClick: false,
       portraitURL: "",
       portraitCaption: "",
-
       suggestDamageCombatant: null,
-      suggestTagCombatant: null
+      suggestTagCombatant: null,
     };
   }
 
@@ -58,7 +64,17 @@ export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
     const acColumnVisible = this.props.encounterState.Combatants.some(
       c => c.AC != undefined
     );
-
+    var conditionsCurrent = []
+    // this.props.encounterState.Combatants.map(combatant => (
+    let tags = []
+    if ( this.props.encounterState.Combatants.length > 0) {
+         this.props.encounterState.Combatants.map(combatant => {
+          if (combatant.Tags.length > 0) {
+            tags.push(...combatant.Tags.map(v=>v.Text))
+          }
+        })
+      conditionsCurrent =  this.props.conditions.filter(v=> tags.indexOf(v['name'])>-1)
+      }
     const modalVisible =
       this.state.showPortrait ||
       this.state.suggestDamageCombatant ||
@@ -70,6 +86,7 @@ export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
       c => c.Id
     );
     const combatantNamesById = _.mapValues(combatantsById, c => c.Name);
+    console.log(this.props)
 
     return (
       <div className="c-player-view">
@@ -111,6 +128,10 @@ export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
           portraitColumnVisible={this.hasImages()}
           acColumnVisible={acColumnVisible}
         />
+
+        {/*<InitiativeListHost tracker={this.props.tracker}/>*/}
+        {/*<CenterColumn tracker={props.tracker} />*/}
+
         <ul className="combatants">
           {this.props.encounterState.Combatants.map(combatant => (
             <PlayerViewCombatant
@@ -143,6 +164,9 @@ export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
             activeCombatantId={this.props.encounterState.ActiveCombatantId}
           />
         )}
+         {conditionsCurrent.length>0 && (
+            <PlayerViewTags conditionsCurrent={conditionsCurrent} conditions={this.props.conditions}/>
+     )}
       </div>
     );
   }

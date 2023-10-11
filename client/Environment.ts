@@ -5,7 +5,7 @@ export const env: ClientEnvironment = {
   EncounterId: "",
   PostedEncounter: null,
   HasStorage: false,
-  HasEpicInitiative: false,
+  HasEpicInitiative: true,
   IsLoggedIn: false,
   SendMetrics: false,
   BaseUrl: "",

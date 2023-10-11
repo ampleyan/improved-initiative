@@ -12,7 +12,7 @@ import { RegisterBindingHandlers } from "./Utility/CustomBindingHandlers";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { App } from "./App";
 import { Metrics } from "./Utility/Metrics";
-
+var viewModel
 window.onload = async () => {
   LoadEnvironment();
   RegisterBindingHandlers();
@@ -25,7 +25,7 @@ window.onload = async () => {
         env.EncounterId = customEncounterId;
       }
     }
-    const viewModel = new TrackerViewModel(SocketIOClient.io());
+    viewModel = new TrackerViewModel(SocketIOClient.io());
 
     const container = document.getElementById("app__container");
     if (!container) {
@@ -40,12 +40,15 @@ window.onload = async () => {
   }
 
   if (document.getElementById("playerview")) {
+    // const viewModel = new TrackerViewModel(SocketIOClient.io());
     const encounterId = env.EncounterId;
     const container = document.getElementById("playerview__container");
     if (!container) {
       throw "#playerview__container not found";
     }
-    const playerView = new ReactPlayerView(container, encounterId);
+    console.log(viewModel)
+    const playerView = new ReactPlayerView({element:container, encounterId:encounterId});
+
     playerView.LoadEncounterFromServer();
     playerView.ConnectToSocket(SocketIOClient.io());
   }

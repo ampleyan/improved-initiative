@@ -1,5 +1,6 @@
 import * as React from "react";
 import { render as renderReact } from "react-dom";
+// import { TrackerViewModel } from "../TrackerViewModel"
 
 import { CombatStats } from "../../common/CombatStats";
 import { TagState } from "../../common/CombatantState";
@@ -11,25 +12,61 @@ import { getDefaultSettings } from "../../common/Settings";
 import { PlayerView } from "./components/PlayerView";
 import axios from "axios";
 import { Socket } from "socket.io-client";
+import {TrackerViewModel} from "../TrackerViewModel";
+import {ApplyDamageCallback} from "./components/DamageSuggestor";
+import {ConditionReferencePrompt} from "../Prompts/ConditionReferencePrompt";
+import {Library} from "../Library/useLibrary";
+import {StatBlock} from "../../common/StatBlock";
+import {ListingMeta} from "../../common/Listable";
+import {ImportOpen5eStatBlock} from "../Importers/Open5eImporter";
 
-export class ReactPlayerView {
+export interface OwnProps {
+  tracker?: TrackerViewModel;
+}
+
+export interface viewProps {
+  element?: Element;
+  encounterId?:string;
+}
+// export type PlayerViewProps = viewProps & OwnProps;
+async function preloadConditions() {
+  try {
+    const response = await axios.get("/open5e/conditions/");
+    const open5eListings: ListingMeta[] = response.data;
+    return open5eListings
+  } catch (error) {}
+}
+
+export class ReactPlayerView extends React.Component<OwnProps, viewProps>{
   private playerViewState: PlayerViewState;
   private socket: Socket;
+  // private viewState: viewProps;
+  // private tracker: TrackerViewModel
 
-  constructor(
-    private element: Element,
-    private encounterId: string
-  ) {
+  constructor(props) {
+    super(props);
+    // this.encounterId=props.encounterId
+    this.state = props
+    this.state['tags'] = []
+    this.state['conditions'] = []
+    let conditions = []
+     preloadConditions().then(res=> conditions = res)
     this.renderPlayerView({
       encounterState: EncounterState.Default<PlayerViewCombatantState>(),
-      settings: getDefaultSettings().PlayerView
+      settings: getDefaultSettings().PlayerView,
+      conditions: conditions
+      // tracker: props.tracker
     });
+
+
+
+
   }
 
   public async LoadEncounterFromServer() {
     try {
       const playerView: PlayerViewState = await axios
-        .get(`../playerviews/${this.encounterId}`)
+        .get(`../playerviews/${this.state.encounterId}`)
         .then(r => r.data);
       playerView.encounterState =
         playerView.encounterState ||
@@ -48,7 +85,7 @@ export class ReactPlayerView {
         this.renderPlayerView({
           encounterState: encounter,
           settings: this.playerViewState.settings,
-          combatStats: this.playerViewState.combatStats
+          combatStats: this.playerViewState.combatStats,
         });
       }
     );
@@ -67,20 +104,35 @@ export class ReactPlayerView {
       });
     });
 
-    this.socket.emit("join encounter", this.encounterId);
+    this.socket.emit("join encounter", this.state.encounterId);
   }
 
-  private renderPlayerView(newState: PlayerViewState) {
+  private async renderPlayerView(newState: PlayerViewState) {
+    console.log(this.props)
     this.playerViewState = newState;
+     let conditions = await preloadConditions()
+    // if (newState.encounterState.Combatants.length > 0) {
+    //   newState.encounterState.Combatants.map(combatant => {
+    //     if (combatant.Tags.length > 0) {
+    //       this.state['tags'].push(...combatant.Tags.map(v=>v.Text))
+    //     }
+    //   })
+    //
+    //
+    // this.state['conditionsCurrent'] =  conditions.filter(v=> this.state['tags'].indexOf(v['name'])>-1)
+    // }
+
     renderReact(
-      <PlayerView
-        encounterState={this.playerViewState.encounterState}
-        settings={this.playerViewState.settings}
-        combatStats={this.playerViewState.combatStats}
-        onSuggestDamage={this.suggestDamage}
-        onSuggestTag={this.suggestTag}
-      />,
-      this.element
+        <PlayerView
+            encounterState={this.playerViewState.encounterState}
+            settings={this.playerViewState.settings}
+            combatStats={this.playerViewState.combatStats}
+            conditionsCurrent={this.state['conditionsCurrent']}
+            conditions={conditions}
+            onSuggestDamage={this.suggestDamage}
+            onSuggestTag={this.suggestTag}
+        />,
+        this.state.element
     );
   }
 
@@ -90,7 +142,7 @@ export class ReactPlayerView {
     }
     this.socket.emit(
       "suggest damage",
-      this.encounterId,
+      this.state.encounterId,
       [combatantId],
       damageAmount,
       "Player"
@@ -103,7 +155,7 @@ export class ReactPlayerView {
     }
     this.socket.emit(
       "suggest tag",
-      this.encounterId,
+      this.state.encounterId,
       [combatantId],
       tagState,
       "Player"

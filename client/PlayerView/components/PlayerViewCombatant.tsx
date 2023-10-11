@@ -25,18 +25,9 @@ export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProp
     }
     const hasColor =
       this.props.combatant.Color && this.props.combatant.Color.length > 0;
+
     return (
       <li className={classNames.join(" ")}>
-        {/*  {this.props.portraitColumnVisible && (*/}
-        {/*  <div className="combatant__portrait">*/}
-        {/*    {this.props.combatant.ImageURL && this.props.isActive && (*/}
-        {/*      <img*/}
-        {/*        src={this.props.combatant.ImageURL}*/}
-        {/*        onClick={() => this.props.showPortrait(this.props.combatant)}*/}
-        {/*      />*/}
-        {/*    )}*/}
-        {/*  </div>*/}
-        {/*)}*/}
         <div className="combatant__portrait">
             {this.props.combatant.ImageURL && this.props.isActive && (
               <img
@@ -83,15 +74,15 @@ export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProp
               {tag.Text}
             </div>
           ))}
-          {this.props.suggestTag && (
-            <div className="combatant__add-tag-button">
-              <span
-                className="fas fa-tag fa-clickable"
-                title="Suggest a Tag"
-                onClick={() => this.props.suggestTag(this.props.combatant)}
-              />
-            </div>
-          )}
+          {/*{*/}
+          {/*  <div className="combatant__add-tag-button">*/}
+          {/*    <span*/}
+          {/*      className="fas fa-tag fa-clickable"*/}
+          {/*      title="Suggest a Tag"*/}
+          {/*      onClick={() => this.props.suggestTag(this.props.combatant)}*/}
+          {/*    />*/}
+          {/*  </div>*/}
+          {/*}*/}
         </div>
       </li>
     );

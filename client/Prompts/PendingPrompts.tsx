@@ -8,7 +8,7 @@ export interface PromptProps<T extends object> {
   initialValues: T;
 }
 
-class Prompt<T extends object> extends React.Component<
+export class Prompt<T extends object> extends React.Component<
   PromptProps<T> & {
     onCancel: () => void;
   }

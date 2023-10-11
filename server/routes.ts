@@ -168,6 +168,11 @@ export default function (
     res.json(playerView);
   });
 
+  app.get("/states/:name", async (req: Req, res: Res) => {
+    const playerView = await playerViews.Get(req.params.id);
+    res.json(playerView);
+  });
+
   configureBasicRulesContent(app);
   configureOpen5eContent(app);
 

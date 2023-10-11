@@ -17,6 +17,7 @@ export async function configureOpen5eContent(
 
   const [basicRulesListings, additionalListings] =
     await getAllListings(sourceUrl);
+  const basicConditionsListing =  await getAllConditions()
 
   app.get("/open5e/basicrules/", (req: Req, res: Res) => {
     res.json(basicRulesListings);
@@ -24,6 +25,9 @@ export async function configureOpen5eContent(
 
   app.get("/open5e/additionalcontent/", (req: Req, res: Res) => {
     res.json(additionalListings);
+  });
+  app.get("/open5e/conditions/", (req: Req, res: Res) => {
+    res.json(basicConditionsListing);
   });
 }
 
@@ -54,6 +58,30 @@ async function getAllListings(
   return [basicRulesListings, additionalListings];
 }
 
+
+
+
+async function getAllConditions(): Promise<ListingMeta[]> {
+  let basicConditionsListings: ListingMeta[] = [];
+  const nextUrl = ' https://api.open5e.com/v1/conditions/';
+  console.log("Loading listings from Open5e.");
+  // do {
+    console.log("Loading " + nextUrl);
+    try {
+      const response = await axios.get(nextUrl);
+       basicConditionsListings = response.data.results
+
+
+      // additionalListings.push(basicConditionsListings);
+      // nextUrl = response.data?.next;
+    } catch (e) {
+      console.warn("Problem loading content", JSON.stringify(e));
+    }
+
+  console.log("Done.");
+
+  return basicConditionsListings
+}
 function getMeta(r: any): ListingMeta {
   const listingMeta: ListingMeta = {
     Id: "open5e-" + r.slug,

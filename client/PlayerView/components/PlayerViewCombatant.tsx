@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantState";
+import imglyRemoveBackground from "@imgly/background-removal"
 
 interface PlayerViewCombatantProps {
   combatant: PlayerViewCombatantState;
@@ -27,9 +28,10 @@ export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProp
       this.props.combatant.Color && this.props.combatant.Color.length > 0;
 
     return (
-      <li className={classNames.join(" ")}>
+      <div className={classNames.join(" ")}>
         <div className="combatant__portrait">
             {this.props.combatant.ImageURL && this.props.isActive && (
+
               <img
                 src={this.props.combatant.ImageURL}
                 onClick={() => this.props.showPortrait(this.props.combatant)}
@@ -84,7 +86,7 @@ export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProp
           {/*  </div>*/}
           {/*}*/}
         </div>
-      </li>
+      </div>
     );
   }
 }

@@ -124,15 +124,12 @@ export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
         {this.state.showCombatStats && (
           <CombatStatsPopup stats={this.props.combatStats} />
         )}
-        <PlayerViewCombatantHeader
-          portraitColumnVisible={this.hasImages()}
-          acColumnVisible={acColumnVisible}
-        />
 
-        {/*<InitiativeListHost tracker={this.props.tracker}/>*/}
-        {/*<CenterColumn tracker={props.tracker} />*/}
-
-        <ul className="combatants">
+        <div className="combatants">
+          <PlayerViewCombatantHeader
+              portraitColumnVisible={this.hasImages()}
+              acColumnVisible={acColumnVisible}
+            />
           {this.props.encounterState.Combatants.map(combatant => (
             <PlayerViewCombatant
               showPortrait={this.showPortrait}
@@ -152,8 +149,8 @@ export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
               key={combatant.Id}
             />
           ))}
-        </ul>
-        {footerVisible && (
+        </div>
+         {footerVisible && (
           <CombatFooter
             timerVisible={this.props.settings.DisplayTurnTimer}
             currentRound={
@@ -164,9 +161,11 @@ export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
             activeCombatantId={this.props.encounterState.ActiveCombatantId}
           />
         )}
-         {conditionsCurrent.length>0 && (
+                 {conditionsCurrent.length>0 && (
             <PlayerViewTags conditionsCurrent={conditionsCurrent} conditions={this.props.conditions}/>
      )}
+
+
       </div>
     );
   }

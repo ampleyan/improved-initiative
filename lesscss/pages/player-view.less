@@ -14,14 +14,16 @@
   margin: 0;
   font-size: 20px;
   padding-left: 120px;
-  background: #f4efe7 url('../img/back.jpg') no-repeat center / cover;
+  background: #f4efe7 url('../img/back.jpg')  center / cover;
 
   .combatant {
-    margin-left: 320px;
-    margin-right: 320px;
+    margin-left: 420px;
+    //margin-right: 320px;
     height: unset;
     display: flex;
     border-left: @active-combatant-indicator-width solid transparent;
+    width: 50%;
+    flex-direction: row;
   }
 
   .combatant.active {
@@ -30,8 +32,10 @@
   }
 
   .combatant--header {
-    margin-left: 320px;
+    margin-left: 420px;
     margin-right: 320px;
+    width: 50%;
+
     flex-direction: row;
     padding: @large-spacer @medium-spacer @large-spacer @medium-spacer;
   }
@@ -57,7 +61,7 @@
     z-index:1;
     left: 0;
     top: 0;
-    margin-left: 120px;
+    margin-left: 220px;
     //margin: 0px 10px 10px 10px;
   }
 
@@ -68,8 +72,8 @@
 
   .combatant__tags {
     flex-direction: row;
-    flex-grow: 1;
-
+    flex-grow: 0;
+    justify-content: center;
     .tag {
       .colors(@primary-white, @primary-red);
       margin-right: @large-spacer;
@@ -84,12 +88,14 @@
   }
 
   .combat-footer {
-      margin-left: 320px !important;
+      margin-left: 420px !important;
     margin-right: 320px !important;
     flex-direction: row;
     justify-content: flex-end;
     margin: @medium-spacer;
     color: @primary-white;
+            width: 50%;
+
     > span {
       padding-right: @medium-spacer;
     }
@@ -202,4 +208,8 @@
       transform: scale(1);
     }
   }
+}
+
+.c-player-view {
+      flex-direction: column;
 }

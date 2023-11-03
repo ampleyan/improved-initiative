@@ -1,27 +1,14 @@
-version: "2.1"
+version: "2"
 services:
   server:
-    build: .
+    image: ageapps/docker-node-mongo
     ports:
       - "8080:3000"
     depends_on:
-      db:
-        condition: service_healthy
-    # volumes:
-    #   - ./app:/server # volume in host -> $(pwd)/app
-
-    command: [nodemon, ./bin/www]
-
+      - db
 
   db:
     image: mongo
     command: mongod --smallfiles
-    # volumes:
-    #   - ./mongo/db:/data/db
-    # ports:
-    #   - "27017:27017"
-    healthcheck:
-      test: ["CMD", "echo", "show dbs", "|", "mongo"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    ports:
+      - "27017:27017"

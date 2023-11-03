@@ -6,10 +6,10 @@ const merge = require("webpack-merge");
 
 module.exports = merge(baseConfig, {
   devtool: "inline-source-map",
-  // devServer: {
-  //     host: 'localhost',
-  //     port: 8082,
-  //   },
+  devServer: {
+      host: 'localhost',
+      port: 8082,
+    },
   watch: true,
   mode: "development",
   plugins: [

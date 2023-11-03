@@ -1,26 +1,30 @@
-version: '3.9'
-
+version: '3.8'
 services:
-  # Mongodb service
-  mongo_db:
-    container_name: db_container
-    image: mongo:latest
-    restart: always
-    volumes:
-      - mongo_data:/data/db
-
-  # Node api service
-  api:
+  webapp:
     build: .
     ports:
-      # local->container
-      - 4000:3000
+      - "7070:80"
     environment:
-      PORT: 3000
-      MONGODB_URI: mongodb://mongo_db:27017
-      DB_NAME: sample-db
+      - NODE_ENV=development
+      - BASE_URL=http://localhost:7070
+      - DEFAULT_ACCOUNT_LEVEL=epicinitiative
+      - DB_CONNECTION_STRING=mongodb://ampleyan:Xus70aiaf71@mongo:27017/improvedInit
     depends_on:
-      - mongo_db
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+      - MONGO_INITDB_DATABASE=improvedInit
+
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+    ports:
+      - "27017:27017" # Optional: Expose this port only if you need to access the database from outside Docker.
 
 volumes:
-  mongo_data: {}
+  mongodb_data: # This named volume will store the MongoDB data persistently

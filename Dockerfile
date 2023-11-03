@@ -1,18 +1,32 @@
-FROM node:carbon
-ARG NODE_ENV
-ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
-ENV PATH=$PATH:/home/node/.npm-global/bin
-RUN npm install -g grunt
+FROM node:19
 
+# Install grunt and nodemon globally
+RUN npm install -g grunt nodemon
+
+# Set the working directory in the container
 WORKDIR /usr/src/app
+RUN mkdir -p ./public/webfonts/
+
+# Copy package.json and package-lock.json
 COPY package*.json ./
+
+# Install project dependencies
 RUN npm install
 
+# Copy the rest of the project
 COPY . .
-RUN grunt --no-color copy
 
-ENV NODE_ENV=${NODE_ENV}
-RUN if [ "$NODE_ENV" = "production" ]; then grunt --no-color build_min; else grunt --no-color build_dev; fi
+# Set environment variables
+ENV NODE_ENV=development \
+    BASE_URL=http://localhost:7070 \
+    DEFAULT_ACCOUNT_LEVEL=epicinitiative \
+    DB_CONNECTION_STRING=mongodb://ampleyan:Xus70aiaf71@localhost:27017/improvedInit
 
+# Build the project with grunt
+RUN grunt --no-color build_dev --force
+
+# Expose the port the app runs on
 EXPOSE 80
-CMD [ "node", "server/server.js" ]
+
+# Start the app using nodemon for automatic reloading
+CMD ["nodemon", "server/server.js"]

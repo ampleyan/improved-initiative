@@ -19,8 +19,9 @@ COPY . .
 
 # Set environment variables for development
 ENV NODE_ENV='development'
-ENV BASE_URL='http://localhost'
+ENV BASE_URL='http://localhost:7070'
 ENV DEFAULT_ACCOUNT_LEVEL='epicinitiative'
+ENV DB_CONNECTION_STRING='mongodb://mongoadmin:secret@localhost:27017''
 
 # Run your build process here
 RUN grunt --no-color build_dev

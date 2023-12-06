@@ -34,30 +34,29 @@ export async function upsertUser(
 
   const db = mongoClient.db();
   const users = await db.collection<User>("users");
-  const result = await users.findOneAndUpdate(
-    {
-      patreonId
-    },
-    {
-      $set: {
-        patreonId,
-        accountStatus,
-        emailAddress
+  const {value: user} = await users.findOneAndUpdate(
+      {
+        patreonId
       },
-      $setOnInsert: {
-        statblocks: {},
-        persistentcharacters: {},
-        spells: {},
-        encounters: {},
-        settings: {}
+      {
+        $set: {
+          patreonId,
+          accountStatus,
+          emailAddress
+        },
+        $setOnInsert: {
+          statblocks: {},
+          persistentcharacters: {},
+          spells: {},
+          encounters: {},
+          settings: {}
+        }
+      },
+      {
+        upsert: true,
+        returnDocument: "after"
       }
-    },
-    {
-      upsert: true,
-      returnDocument: "after"
-    }
   );
-  const user = result.value;
   return user;
 }
 

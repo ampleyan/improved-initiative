@@ -5,10 +5,11 @@ services:
     ports:
       - "7070:80"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - BASE_URL=http://localhost:7070
       - DEFAULT_ACCOUNT_LEVEL=epicinitiative
-      - DB_CONNECTION_STRING=mongodb://ampleyan:Xus70aiaf71@mongo:27017/improvedInit
+      - DB_CONNECTION_STRING=mongodb://mongoadmin:secret@mongo:27017
+      - METRICS_DB_CONNECTION_STRING=mongodb://mongoadmin:secret@mongo:27017
     depends_on:
       - mongo
 
@@ -21,7 +22,7 @@ services:
 
     volumes:
       - mongodb_data:/data/db
-      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+#       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
     ports:
       - "27017:27017" # Optional: Expose this port only if you need to access the database from outside Docker.

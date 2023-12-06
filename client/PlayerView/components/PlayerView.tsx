@@ -100,7 +100,7 @@ export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
         {modalVisible && (
           <div className="modal-blur" onClick={this.closeAllModals} />
         )}
-        {this.state.showPortrait && (
+        {(
           <PortraitWithCaption
             imageURL={this.state.portraitURL}
             caption={this.state.portraitCaption}
